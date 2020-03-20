@@ -51,6 +51,8 @@ namespace CameraStream
 
             return app;
         }
+
+        //https://stackoverflow.com/questions/2265910/convert-an-image-to-grayscale/2265990#2265990
         public static Bitmap MakeGrayscale3(Bitmap original)
         {
             //create a blank bitmap the same size as original

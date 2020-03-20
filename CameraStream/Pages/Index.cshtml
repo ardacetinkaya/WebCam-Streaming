@@ -1,0 +1,164 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <h1>WebCam Streaming Sample Application</h1>
+</div>
+
+<p id="lblState">Ready to connect...</p>
+<div class="d-flex flex-row">
+    <div class="p-2">
+        <label for="server">WebSocket Server:</label>
+    </div>
+    <div class="p-2">
+        <input id="server" />
+    </div>
+    <div class="m-2">
+        <button id="btnConnect" type="submit">Connect</button>
+    </div>
+    <div class="m-2">
+        <button id="btnClose" disabled>Close Socket</button>
+    </div>
+</div>
+
+
+<div class="row m-4">
+    <div class="col-5">
+        <h2>From client</h2>
+        <video id="video" autoplay></video>
+    </div>
+    <div class="col-2"></div>
+    <div class="col-5">
+        <h2>From server</h2>
+        <img id="img" src="">
+    </div>
+
+</div>
+
+@section Scripts
+{
+    <script>
+        var video = document.getElementById('video');
+        var server = document.getElementById("server");
+        var btnConnect = document.getElementById("btnConnect");
+        var btnClose = document.getElementById("btnClose");
+        var lblState = document.getElementById("lblState");
+        var img = document.getElementById('img');
+
+        var socket;
+        var scheme = document.location.protocol === "https:" ? "wss" : "ws";
+        var port = document.location.port ? (":" + document.location.port) : "";
+
+        server.value = scheme + "://" + document.location.hostname + port + "/ws";
+
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: { width: 400, height: 400 }, frameRate: { ideal: 5, max: 10 }, audio: true }).then(function (stream) {
+                video.srcObject = stream;
+                video.play();
+            });
+        }
+
+        const getVideoFrame = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            const data = canvas.toDataURL('image/jpeg', 0.2);
+            return data;
+        }
+
+        function updateState() {
+            function disable() {
+                btnClose.disabled = true;
+            }
+            function enable() {
+                btnClose.disabled = false;
+            }
+
+            server.disabled = true;
+            btnConnect.disabled = true;
+
+            if (!socket) {
+                disable();
+            } else {
+                switch (socket.readyState) {
+                    case WebSocket.CLOSED:
+                        lblState.innerHTML = "Closed";
+                        disable();
+                        server.disabled = false;
+                        btnConnect.disabled = false;
+                        img.src = '';
+                        break;
+                    case WebSocket.CLOSING:
+                        lblState.innerHTML = "Closing...";
+                        disable();
+                        break;
+                    case WebSocket.CONNECTING:
+                        lblState.innerHTML = "Connecting...";
+                        disable();
+                        break;
+                    case WebSocket.OPEN:
+                        lblState.innerHTML = "Open";
+                        enable();
+                        break;
+                    default:
+                        lblState.innerHTML = "Unknown state: " + htmlEscape(socket.readyState);
+                        disable();
+                        break;
+                }
+            }
+        }
+
+        btnClose.onclick = function () {
+            if (!socket || socket.readyState !== WebSocket.OPEN) {
+                alert("WebSocket not connected.");
+            }
+            socket.close(1000, "Closing...");
+        };
+
+        btnConnect.onclick = function () {
+            lblState.innerHTML = "Connecting...";
+            socket = new WebSocket(server.value);
+            socket.onopen = function (event) {
+                updateState();
+                lblState.innerHTML = `Connected to ${server.value}`;
+                setInterval(() => {
+                    if (isOpen(socket)) {
+                        var data = getVideoFrame();
+                        socket.send(data);
+                    }
+                }, 1000 / 6);
+            };
+            socket.onclose = function (event) {
+                updateState();
+            };
+            socket.onerror = updateState;
+            socket.onmessage = message => {
+                document.getElementById('img').src = '';
+                var image = new Image();
+                image.src = message.data;
+                document.getElementById('img').src = image.src;
+
+
+            }
+        };
+
+        function isOpen(ws) {
+            return ws.readyState === ws.OPEN;
+        }
+
+        function htmlEscape(str) {
+            return str.toString()
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+    </script>
+
+}

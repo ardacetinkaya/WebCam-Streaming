@@ -140,7 +140,7 @@
             socket.onmessage = message => {
                 document.getElementById('img').src = '';
                 var image = new Image();
-                image.src = message.data;
+                image.src = `data:image/jpeg;base64,${message.data}`;
                 document.getElementById('img').src = image.src;
 
 

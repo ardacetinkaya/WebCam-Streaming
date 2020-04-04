@@ -6,4 +6,9 @@ In this ASP.NET Core web app., the web-cam streams are delivered to the server s
 
  
  <img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-1.png" width="650px"/>
+ <img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-2.png"/>
+ <img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-3.png"/>
+
+ <img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-1.gif"/>
+ <img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-2.gif"/>
  

@@ -19,7 +19,9 @@ Within this demostration; within an ASP.NET Core application, basically client-s
 
 In second demonstration, the scenario is simple and also fun(😀); **ASP.NET Core SignalR** approached are used to stream web-cam video between two clients. Two different clients access to same **ASP.NET Core Web Application(Razor)**. Client-A (at the right side) calls Client-B(left one), then a notification pop-up appears in Client-B to accept or decline the call.
 
+<img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-2.png" width="800px"/>
 
+<img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-3.png" width="800px"/>
 
 After Client-B accepts the call, a connection is established within Client-A and Client-B with ASP.NET Core SignalR Hub approach. In this scenario, who makes the call can share web-cam video stream with client. So when Client-A opens the camera, Client-A streams the web-cam video into the server-side, SignalR Hub. From the hub, streamed data is send to Client-B within standart method calls in client-side.
 

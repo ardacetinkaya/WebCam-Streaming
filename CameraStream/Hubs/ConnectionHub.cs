@@ -3,9 +3,11 @@ namespace CameraStream.Hubs
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Threading;
     using System.Threading.Channels;
     using System.Threading.Tasks;
+    using System.Web;
     using CameraStream.Models;
     using Microsoft.AspNetCore.SignalR;
     public class ConnectionHub : Hub<IConnectionHub>
@@ -171,17 +173,33 @@ namespace CameraStream.Hubs
             }
         }
 
-        public async Task UploadStream(ChannelReader<string> stream,string datada)
+        public async Task UploadStream(ChannelReader<string> stream, string targetConnectionId)
         {
             var callingUser = _users.SingleOrDefault(u => u.ConnectionId == Context.ConnectionId);
-            Console.WriteLine(datada);
+
             while (await stream.WaitToReadAsync())
             {
                 while (stream.TryRead(out var item))
                 {
                     //Console.WriteLine(item);
-                    await Clients.All.ReceiveData(callingUser, item);
-                  
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        var dataStream = item.Split('|');
+                        if (!string.IsNullOrEmpty(dataStream[0]))
+                        {
+							var connectionId = dataStream[0].Trim().TrimStart('\b');
+                            var targetUser = _users.SingleOrDefault(u => u.ConnectionId == connectionId);
+                            if (targetUser != null)
+                            {
+                                await Clients.Client(targetUser.ConnectionId).ReceiveData(callingUser, dataStream[1]);
+                            }else{
+                                Console.WriteLine($"No target connection with - {dataStream[0].Trim()}");
+                            }
+                        }
+
+                    }
+
+
                 }
             }
         }
@@ -189,7 +207,7 @@ namespace CameraStream.Hubs
         public ChannelReader<string> DownloadStream(int delay, CancellationToken cancellationToken)
         {
             var channel = Channel.CreateUnbounded<string>();
-            _ = WriteItemsAsync(channel.Writer,DateTime.Now.Millisecond.ToString(), delay, cancellationToken);
+            _ = WriteItemsAsync(channel.Writer, DateTime.Now.Millisecond.ToString(), delay, cancellationToken);
 
             return channel.Reader;
         }

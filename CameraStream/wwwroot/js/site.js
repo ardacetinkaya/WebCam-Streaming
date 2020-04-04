@@ -16,7 +16,7 @@ var hubconnection = new signalR.HubConnectionBuilder()
     .configureLogging(signalR.LogLevel.None).build();
 var subject = new signalR.Subject();
 var callinguser = null;
-
+var acceptinguser = "";
 $(document).ready(function () {
     server.value = scheme + "://" + document.location.hostname + port + "/ws";
 
@@ -37,11 +37,13 @@ hubconnection.on('updateOnlineUsers', (userList) => {
 
         } else {
             var onlineUsers = '<li class="list-group-item user" data-cid=' + userList[index].connectionId + ' data-username=' + userList[index].username + '>';
-            onlineUsers += '<div class="d-flex flex-row">';
-            onlineUsers += '<div class="m-1 d-flex justify-content-center align-items-center"><small>' + userList[index].username + '</small></div>';
-            onlineUsers += '<div class="m-1 d-flex justify-content-center align-items-center"><span data-callstatus=' + userList[index].inCall + '>' + ((userList[index].inCall == true) ? '<small>(In call)</small>' : '<small>(Idle)</small>') + '</span></div>';
+            onlineUsers += '<div class="d-lg-flex flex-row">';
+            onlineUsers += '<div class="m-1 d-lg-flex justify-content-center align-items-center"><small>' + userList[index].username + '</small></div>';
+            onlineUsers += '<div class="d-flex flex-row justify-content-center align-items-center">';
+            onlineUsers += '<div class="m-1 d-lg-flex justify-content-center align-items-center"><span data-callstatus=' + userList[index].inCall + '>' + ((userList[index].inCall == true) ? '<small>(In call)</small>' : '<small>(Idle)</small>') + '</span></div>';
             onlineUsers += '<div class="m-2"><button id="btnCallUser" type="button" class="btn btn-primary btn-sm" ' + ((userList[index].inCall == true) ? 'disabled' : '') + ' onclick="callUser(\'' + userList[index].connectionId + '\')">Call</button></div>';
             onlineUsers += '<div class="m-2"><button id="btnEndCall" type="button" class="btn btn-primary btn-sm" ' + ((userList[index].inCall == true) ? '' : 'disabled') + 'onclick="endCall(\'' + userList[index].connectionId + '\')">End</button></div>';
+            onlineUsers += '</div>';
             onlineUsers += '</div></li>';
             $('#usersdata').append(onlineUsers);
         }
@@ -50,6 +52,8 @@ hubconnection.on('updateOnlineUsers', (userList) => {
 
 hubconnection.on('callAccepted', (acceptingUser) => {
     console.log('Call accepted by ' + JSON.stringify(acceptingUser) + '.');
+
+    acceptinguser = acceptingUser;
 });
 
 hubconnection.on('callDeclined', (decliningUser, reason) => {
@@ -75,6 +79,7 @@ hubconnection.on('receiveData', (signalingUser, data) => {
 
 hubconnection.on('callEnded', (signalingUser, signal) => {
     console.log('Call with ' + signalingUser.connectionId + ' has ended: ' + signal);
+    document.getElementById('imgHub').src = '';
 });
 
 
@@ -121,8 +126,9 @@ dataStream = (acceptingUser) => {
 const intervalHandle = setInterval(() => {
     var state = btnOpenCamera.getAttribute('data-state');
     if (state === 'opened') {
-        subject.next(getVideoFrame());
-
+        console.log(acceptinguser.connectionId);
+        subject.next(`${(acceptinguser)?acceptinguser.connectionId:''}|${getVideoFrame()}`);
+        
         hubconnection.stream("DownloadStream", 500)
             .subscribe({
                 next: (item) => {

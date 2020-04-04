@@ -1,11 +1,11 @@
 # WebCam Streaming
  
-This is a simple proof of concept work for demonstration of web-cam streaming in ASP.NET Core web applications, with web-sockets and also SignalR Core.
+This is a simple proof of concept work for demonstration of web-cam streaming in **ASP.NET Core** web applications, with **web-sockets** and also **ASP.NET Core SignalR**.
  
 In this ASP.NET Core web app., there is two different approach for web-cam streams;
 
-1. System.Net.WebSockets.WebSocket
-2. SignalR Core
+1. **System.Net.WebSockets.WebSocket**
+2. **ASP.NET Core SignalR**
 
 <p align="center"><img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-1.png" width="650px"/></p>
 
@@ -17,13 +17,16 @@ Within this demostration; within an ASP.NET Core application, basically client-s
  <p align="center"><img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-1.gif"/></p>
 
 
-In second demonstration; ASP.NET Core SignalR approached are used to stream web-cam video between two clients.
+In second demonstration, the scenario is simple and also fun(😀); **ASP.NET Core SignalR** approached are used to stream web-cam video between two clients. Two different clients access to same **ASP.NET Core Web Application(Razor)**. Client-A (at the right side) calls Client-B(left one), then a notification pop-up appears in Client-B to accept or decline the call.
 
+
+
+After Client-B accepts the call, a connection is established within Client-A and Client-B with ASP.NET Core SignalR Hub approach. In this scenario, who makes the call can share web-cam video stream with client. So when Client-A opens the camera, Client-A streams the web-cam video into the server-side, SignalR Hub. From the hub, streamed data is send to Client-B within standart method calls in client-side.
+
+ <p align="center"><img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-2.gif"/></p>
  
-<p align="center"><img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-2.png"/></p>
-<p align="center"><img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-3.png"/></p>
+This was just for a weekend fun to see what is possible within ASP.NET Core applications. I am happy with the results so here is this repository. 😀 
 
-
-
- <img src="https://github.com/ardacetinkaya/WebCam-Streaming/blob/master/Example-2.gif"/>
- 
+References for more fun:
+- [Use streaming in ASP.NET Core SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/streaming?view=aspnetcore-3.1)
+- [WebSockets support in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-3.1)

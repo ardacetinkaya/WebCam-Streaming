@@ -52,7 +52,6 @@ hubconnection.on('updateOnlineUsers', (userList) => {
 
 hubconnection.on('callAccepted', (acceptingUser) => {
     console.log('Call accepted by ' + JSON.stringify(acceptingUser) + '.');
-
     acceptinguser = acceptingUser;
 });
 
@@ -120,15 +119,14 @@ const userJoin = (username) => {
 };
 
 dataStream = (acceptingUser) => {
-    hubconnection.send("UploadStream", subject, acceptingUser);
+    if (hubconnection.state === 'Connected')
+        hubconnection.send("UploadStream", subject, `${(acceptingUser) ? acceptingUser.connectionId : ''}`);
 }
 
 const intervalHandle = setInterval(() => {
     var state = btnOpenCamera.getAttribute('data-state');
     if (state === 'opened') {
-        console.log(acceptinguser.connectionId);
-        subject.next(`${(acceptinguser)?acceptinguser.connectionId:''}|${getVideoFrame()}`);
-        
+        subject.next(`${(acceptinguser) ? acceptinguser.connectionId : ''}|${getVideoFrame()}`);
         hubconnection.stream("DownloadStream", 500)
             .subscribe({
                 next: (item) => {

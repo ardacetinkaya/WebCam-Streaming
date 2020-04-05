@@ -1,4 +1,4 @@
-# WebCam Streaming
+# 🎥 WebCam Streaming 
  
 This is a simple proof of concept work for demonstration of web-cam streaming in **ASP.NET Core** web applications, with **web-sockets** and also **ASP.NET Core SignalR**.
  

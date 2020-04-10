@@ -8,11 +8,11 @@ using Microsoft.Extensions.Logging;
 
 namespace CameraStream.Pages
 {
-    public class PrivacyModel : PageModel
+    public class WebRTCModel : PageModel
     {
-        private readonly ILogger<PrivacyModel> _logger;
+        private readonly ILogger<WebRTCModel> _logger;
 
-        public PrivacyModel(ILogger<PrivacyModel> logger)
+        public WebRTCModel(ILogger<WebRTCModel> logger)
         {
             _logger = logger;
         }

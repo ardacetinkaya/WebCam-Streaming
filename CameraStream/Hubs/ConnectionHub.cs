@@ -181,7 +181,6 @@ namespace CameraStream.Hubs
             {
                 while (stream.TryRead(out var item))
                 {
-                    //Console.WriteLine(item);
                     if (!string.IsNullOrEmpty(item))
                     {
                         var dataStream = item.Split('|');
@@ -192,8 +191,6 @@ namespace CameraStream.Hubs
                             if (targetUser != null)
                             {
                                 await Clients.Client(targetUser.ConnectionId).ReceiveData(callingUser, dataStream[1]);
-                            }else{
-                                Console.WriteLine($"No target connection with - {dataStream[0].Trim()}");
                             }
                         }
 
@@ -237,7 +234,7 @@ namespace CameraStream.Hubs
 
         private Connection GetConnection(string connectionId)
         {
-            var matchingCall = _connections.SingleOrDefault(uc => uc.Users.SingleOrDefault(u => u.ConnectionId == connectionId) != null);
+            var matchingCall = _connections.FirstOrDefault(uc => uc.Users.FirstOrDefault(u => u.ConnectionId == connectionId) != null);
             return matchingCall;
         }
     }

@@ -1,0 +1,58 @@
+﻿@page
+@model WebRTCModel
+@{
+    ViewData["Title"] = "WebRTC";
+}
+<h1>@ViewData["Title"]</h1>
+
+<div class="row">
+  <div class="col-12">
+    <ul id="usersdata" class="list-group">
+      <li class="list-group-item">Online Users</li>
+      <li class="list-group-item user" data-cid="" data-username="">
+        <a href="#">
+          <div class="username"></div>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <div class="card card-body bg-light m-2 h-100">
+            <video id="localVideo" playsinline autoplay muted></video>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card card-body bg-light m-2 h-100">
+            <video id="remoteVideo" playsinline autoplay></video>
+        </div>
+    </div>
+     
+
+</div>
+
+<div class="modal fade" id="callmodal" tabindex="-1" role="dialog" aria-labelledby="callmodaltitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="callmodaltitle">Hello</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="declineCall()" data-dismiss="modal">Decline</button>
+        <button type="button" class="btn btn-primary" onclick="acceptCall()">Accept</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/webRTC.js" asp-append-version="true"></script>
+}

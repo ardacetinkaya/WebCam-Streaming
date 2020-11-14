@@ -1,7 +1,6 @@
 namespace CameraStream.Models
 {
     using System;
-    using System.Collections.Generic;
 
     public class Call
     {

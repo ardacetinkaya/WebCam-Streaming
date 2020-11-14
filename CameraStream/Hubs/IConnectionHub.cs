@@ -1,10 +1,10 @@
 
 namespace CameraStream.Hubs
 {
+    using CameraStream.Models;
     using System.Collections.Generic;
     using System.Threading.Channels;
     using System.Threading.Tasks;
-    using CameraStream.Models;
 
     public interface IConnectionHub
     {

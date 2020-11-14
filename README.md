@@ -31,5 +31,5 @@ After Client-B accepts the call, a connection is established within Client-A and
 This was just for a weekend fun to see what is possible within ASP.NET Core applications. I am happy with the results so here is this repository. 😀 
 
 References for more fun:
-- [Use streaming in ASP.NET Core SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/streaming?view=aspnetcore-3.1)
-- [WebSockets support in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/websockets?view=aspnetcore-3.1)
+- [Use streaming in ASP.NET Core SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/streaming)
+- [WebSockets support in ASP.NET Core](https://docs.microsoft.com/en-us/aspnet/core/fundamentals/websockets)

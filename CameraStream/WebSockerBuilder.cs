@@ -17,8 +17,7 @@
         {
             var webSocketOptions = new WebSocketOptions()
             {
-                KeepAliveInterval = TimeSpan.FromSeconds(120),
-                ReceiveBufferSize = 10 * 1024
+                KeepAliveInterval = TimeSpan.FromSeconds(120)
             };
 
             app.UseWebSockets(webSocketOptions);
@@ -72,17 +71,13 @@
                    });
 
                 //create some image attributes
-                using (ImageAttributes attributes = new ImageAttributes())
-                {
-
-                    //set the color matrix attribute
-                    attributes.SetColorMatrix(colorMatrix);
-
-                    //draw the original image on the new image
-                    //using the grayscale color matrix
-                    g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height),
-                                0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
-                }
+                using ImageAttributes attributes = new ImageAttributes();
+                //set the color matrix attribute
+                attributes.SetColorMatrix(colorMatrix);
+                //draw the original image on the new image
+                //using the grayscale color matrix
+                g.DrawImage(original, new Rectangle(0, 0, original.Width, original.Height),
+                            0, 0, original.Width, original.Height, GraphicsUnit.Pixel, attributes);
             }
             return newBitmap;
         }
@@ -101,11 +96,9 @@
                 using (var ms1 = new MemoryStream(imageData))
                 {
                     var ss = Bitmap.FromStream(ms1) as Bitmap;
-                    using (var ms2 = new MemoryStream())
-                    {
-                        MakeGrayscale3(ss).Save(ms2, ImageFormat.Jpeg);
-                        grayscaleImage = ms2.ToArray();
-                    }
+                    using var ms2 = new MemoryStream();
+                    MakeGrayscale3(ss).Save(ms2, ImageFormat.Jpeg);
+                    grayscaleImage = ms2.ToArray();
                 }
 
                 var base64StringResult = Convert.ToBase64String(grayscaleImage);

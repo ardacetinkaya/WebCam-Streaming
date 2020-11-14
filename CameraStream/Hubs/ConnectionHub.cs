@@ -1,15 +1,13 @@
 namespace CameraStream.Hubs
 {
+    using CameraStream.Models;
+    using Microsoft.AspNetCore.SignalR;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
     using System.Threading;
     using System.Threading.Channels;
     using System.Threading.Tasks;
-    using System.Web;
-    using CameraStream.Models;
-    using Microsoft.AspNetCore.SignalR;
     public class ConnectionHub : Hub<IConnectionHub>
     {
         private readonly List<User> _users;
@@ -186,7 +184,7 @@ namespace CameraStream.Hubs
                         var dataStream = item.Split('|');
                         if (!string.IsNullOrEmpty(dataStream[0]))
                         {
-							var connectionId = dataStream[0].Trim().TrimStart('\b');
+                            var connectionId = dataStream[0].Trim().TrimStart('\b');
                             var targetUser = _users.SingleOrDefault(u => u.ConnectionId == connectionId);
                             if (targetUser != null)
                             {
@@ -209,7 +207,7 @@ namespace CameraStream.Hubs
             return channel.Reader;
         }
 
-        private async Task WriteItemsAsync(ChannelWriter<string> writer, string data, int delay, CancellationToken cancellationToken)
+        private static async Task WriteItemsAsync(ChannelWriter<string> writer, string data, int delay, CancellationToken cancellationToken)
         {
             Exception localException = null;
             try

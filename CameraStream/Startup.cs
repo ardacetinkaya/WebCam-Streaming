@@ -1,6 +1,5 @@
 namespace CameraStream
 {
-    using System.Collections.Generic;
     using CameraStream.Hubs;
     using CameraStream.Models;
     using Microsoft.AspNetCore.Builder;
@@ -8,6 +7,7 @@ namespace CameraStream
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using System.Collections.Generic;
 
     public class Startup
     {
